@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using VitaNote.Domain.Models;
 using VitaNote.Domain.Repositories;
+using VitaNote.Infrastructure.Persistence;
 
 namespace VitaNote.Infrastructure.Repositories;
 

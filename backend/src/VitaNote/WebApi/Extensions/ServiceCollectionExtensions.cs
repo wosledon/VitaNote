@@ -1,4 +1,15 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using VitaNote.Application.Auth.Services;
+using VitaNote.Infrastructure.Persistence;
+using VitaNote.Application.HealthRecords.Services;
+using VitaNote.Domain.Repositories;
+using VitaNote.Infrastructure.Storage;
 
 namespace VitaNote.WebApi.Extensions;
 
@@ -9,15 +20,6 @@ public static class ServiceCollectionExtensions
         // Add health record services
         services.AddScoped<VitaNote.Application.HealthRecords.Services.IHealthRecordService, VitaNote.Application.HealthRecords.Services.HealthRecordService>();
         services.AddScoped<VitaNote.Application.HealthRecords.Services.IFoodRecordService, VitaNote.Application.HealthRecords.Services.FoodRecordService>();
-
-        // Add OCR services
-        services.AddScoped<VitaNote.Application.Ocr.Services.IOcrService, VitaNote.Application.Ocr.Services.LlmOcrService>();
-
-        // Add LLM services
-        services.AddScoped<VitaNote.Application.Llm.Services.ILlmService, VitaNote.Application.Llm.Services.LlmService>();
-
-        // Add auth services
-        services.AddScoped<VitaNote.Application.Auth.Services.IAuthService, VitaNote.Application.Auth.Services.AuthService>();
 
         return services;
     }
@@ -33,9 +35,6 @@ public static class ServiceCollectionExtensions
         // Add file storage
         services.Configure<VitaNote.Infrastructure.Storage.StorageSettings>(configuration.GetSection("Storage"));
         services.AddScoped<VitaNote.Infrastructure.Storage.IFileStorageService, VitaNote.Infrastructure.Storage.LocalFileStorageService>();
-
-        // Add LLM/AI client configuration
-        services.Configure<VitaNote.Application.Ocr.Services.OllamaSettings>(configuration.GetSection("Ollama"));
 
         return services;
     }

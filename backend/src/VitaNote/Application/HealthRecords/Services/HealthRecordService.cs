@@ -45,10 +45,13 @@ public class HealthRecordService : IHealthRecordService
     
     public async Task<Guid> AddGlucoseRecordAsync(Guid userId, GlucoseRecordRequest request, CancellationToken cancellationToken = default)
     {
+        // Convert DTO GlucoseType to Domain GlucoseType
+        var domainType = (VitaNote.Domain.ValueObjects.GlucoseType)request.Type;
+        
         var value = new GlucoseRecordValue
         {
             GlucoseLevel = request.GlucoseLevel,
-            Type = request.Type,
+            Type = domainType,
             MealType = request.MealType,
             _comment = request.Comment,
             RecordedAt = DateTime.UtcNow
@@ -119,7 +122,7 @@ public class HealthRecordService : IHealthRecordService
         {
             Id = r.Id,
             GlucoseLevel = JsonSerializer.Deserialize<GlucoseRecordValue>(r.Data)!.GlucoseLevel,
-            Type = JsonSerializer.Deserialize<GlucoseRecordValue>(r.Data)!.Type,
+            Type = (VitaNote.Application.HealthRecords.DTOs.GlucoseType)(VitaNote.Domain.ValueObjects.GlucoseType)JsonSerializer.Deserialize<GlucoseRecordValue>(r.Data)!.Type,
             MealType = JsonSerializer.Deserialize<GlucoseRecordValue>(r.Data)?.MealType,
             Comment = JsonSerializer.Deserialize<GlucoseRecordValue>(r.Data)?._comment,
             RecordedAt = JsonSerializer.Deserialize<GlucoseRecordValue>(r.Data)!.RecordedAt,
@@ -273,7 +276,7 @@ public class HealthRecordService : IHealthRecordService
         };
     }
 
-    public async Task<decimal?> CalculateBMIAsync(Guid userId, decimal currentWeight, CancellationToken cancellationToken = default)
+    public async Task<decimal?> CalculateBMIAsync(Guid userId, decimal? currentWeight = null, CancellationToken cancellationToken = default)
     {
         // Get user's profile for height
         var user = await _healthRecordRepository.GetByUserIdAsync(userId, cancellationToken);

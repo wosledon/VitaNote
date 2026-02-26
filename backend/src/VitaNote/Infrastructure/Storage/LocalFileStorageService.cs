@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
 using System.IO.Compression;
 using System.Security.Cryptography;
 
@@ -8,26 +6,23 @@ namespace VitaNote.Infrastructure.Storage;
 public class LocalFileStorageService : IFileStorageService
 {
     private readonly StorageSettings _settings;
-    
-    public LocalFileStorageService(IOptions<StorageSettings> settings)
+
+    public LocalFileStorageService(StorageSettings settings)
     {
-        _settings = settings.Value;
+        _settings = settings;
     }
     
-    public async Task<string> SaveFileAsync(IFormFile file, string category, CancellationToken cancellationToken = default)
+    public async Task<string> SaveFileAsync(string filePath, string category, CancellationToken cancellationToken = default)
     {
-        var fileName = GenerateFileName(file.FileName);
+        var fileName = Path.GetFileName(filePath);
         var relativePath = Path.Join(category, DateTime.UtcNow.ToString("yyyy/MM/dd"), fileName);
         var fullPath = Path.Combine(_settings.BasePath, relativePath);
-        
+
         // 确保目录存在
         Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
-        
-        using (var stream = new FileStream(fullPath, FileMode.Create))
-        {
-            await file.CopyToAsync(stream, cancellationToken);
-        }
-        
+
+        File.Copy(filePath, fullPath, true);
+
         return fullPath.Replace(_settings.BasePath + Path.DirectorySeparatorChar, "");
     }
     

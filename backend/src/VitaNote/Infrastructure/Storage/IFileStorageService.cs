@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Http;
-
 namespace VitaNote.Infrastructure.Storage;
 
 public interface IFileStorageService
 {
-    Task<string> SaveFileAsync(IFormFile file, string category, CancellationToken cancellationToken = default);
+    Task<string> SaveFileAsync(string filePath, string category, CancellationToken cancellationToken = default);
     Task<bool> DeleteFileAsync(string filePath, CancellationToken cancellationToken = default);
     Task<byte[]> GetFileAsync(string filePath, CancellationToken cancellationToken = default);
     string GetFileUrl(string filePath);

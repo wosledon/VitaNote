@@ -1,6 +1,19 @@
-using VitaNote.Domain.ValueObjects;
-
 namespace VitaNote.Application.HealthRecords.DTOs;
+
+public enum GlucoseType
+{
+    Fasting = 1,
+    Postprandial = 2,
+    Random = 3
+}
+
+public enum MealType
+{
+    Breakfast = 1,
+    Lunch = 2,
+    Dinner = 3,
+    Snack = 4
+}
 
 public class WeightRecordRequest
 {

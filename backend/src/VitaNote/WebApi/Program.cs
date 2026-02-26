@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 using VitaNote.WebApi.Extensions;
+using VitaNote.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,53 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 // Add Swagger
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "VitaNote API",
-        Version = "v1",
-        Description = "VitaNote - Smart Health Management API",
-        Contact = new OpenApiContact
-        {
-            Name = "VitaNote Team",
-            Email = "support@vitanote.com"
-        }
-    });
-    
-    // Enable XML comments
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath))
-    {
-        c.IncludeXmlComments(xmlPath);
-    }
-    
-    // Add JWT authentication to Swagger
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-    
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
+builder.Services.AddSwaggerGen();
 
 // Add CORS
 builder.Services.AddCors(options =>
@@ -71,12 +26,6 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
-
-// Add database
-builder.Services.AddDatabase(builder.Configuration);
-
-// Add authentication
-builder.Services.AddAuthenticationService(builder.Configuration);
 
 // Add application services
 builder.Services.AddApplicationServices();
@@ -94,7 +43,6 @@ if (app.Environment.IsDevelopment())
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "VitaNote API V1");
         c.RoutePrefix = "swagger";
-        c.DisplayRequestDuration();
     });
 }
 
@@ -102,7 +50,8 @@ app.UseCustomCors();
 
 app.UseCustomExceptionMiddleware();
 
-app.UseAuthentication();
+app.UseRouting();
+
 app.UseAuthorization();
 
 app.MapControllers();
@@ -118,10 +67,3 @@ if (app.Environment.IsDevelopment())
 }
 
 app.Run();
-
-// Open API endpoint for mobile app
-app.MapGet("/api/openapi.json", () =>
-{
-    return Results.Text(System.IO.File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "swagger", "v1", "swagger.json")))
-        .WithHeader("Content-Type", "application/json");
-}).WithOpenApi();

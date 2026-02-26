@@ -13,15 +13,7 @@ public interface IHealthRecordService
     Task<IEnumerable<WeightRecordResponse>> GetWeightRecordsAsync(Guid userId, DateTime? startDate = null, DateTime? endDate = null, CancellationToken cancellationToken = default);
     Task<IEnumerable<GlucoseRecordResponse>> GetGlucoseRecordsAsync(Guid userId, DateTime? startDate = null, DateTime? endDate = null, CancellationToken cancellationToken = default);
     Task<IEnumerable<BloodPressureRecordResponse>> GetBloodPressureRecordsAsync(Guid userId, DateTime? startDate = null, DateTime? endDate = null, CancellationToken cancellationToken = default);
-    Task UpdateRecordAsync(Guid recordId, object request, CancellationToken cancellationToken = default);
-    Task DeleteRecordAsync(Guid recordId, CancellationToken cancellationToken = default);
-
-    // Statistics API
     Task<HealthStatisticsResponse> GetHealthStatisticsAsync(Guid userId, CancellationToken cancellationToken = default);
     Task<TrendAnalysisResponse> GetTrendAnalysisAsync(Guid userId, int days = 30, CancellationToken cancellationToken = default);
     Task<decimal?> CalculateBMIAsync(Guid userId, decimal? currentWeight = null, CancellationToken cancellationToken = default);
-    Task<bool> ExportDataAsync(Guid userId, string format, string filePath, CancellationToken cancellationToken = default);
-
-    // OCR API
-    Task<OCRResponse> RecognizeFoodFromOCRAsync(Guid userId, OCRRequest request, CancellationToken cancellationToken = default);
 }

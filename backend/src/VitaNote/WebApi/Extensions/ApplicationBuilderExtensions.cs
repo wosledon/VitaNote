@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using VitaNote.WebApi.Middleware;
+using Microsoft.AspNetCore.Builder;
 
 namespace VitaNote.WebApi.Extensions;
 

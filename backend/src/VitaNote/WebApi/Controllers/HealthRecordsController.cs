@@ -95,22 +95,6 @@ public class HealthRecordsController : ControllerBase
         return Ok(bmi);
     }
 
-    [HttpGet("export")]
-    public async Task<ActionResult> ExportData([FromQuery] string format = "json")
-    {
-        var userId = GetUserId();
-        var filePath = Path.Combine(Path.GetTempPath(), $"vitanote_export_{userId}_{DateTime.UtcNow:yyyyMMdd_HHmmss}.{format}");
-        var success = await _healthRecordService.ExportDataAsync(userId, format, filePath);
-        
-        if (success && File.Exists(filePath))
-        {
-            var bytes = await File.ReadAllBytesAsync(filePath);
-            return File(bytes, "application/octet-stream", $"vitanote_export.{format}");
-        }
-
-        return Ok(new { message = "Export completed", filePath });
-    }
-
     private Guid GetUserId()
     {
         var userIdClaim = User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using VitaNote.Domain.Models;
 using VitaNote.Domain.Repositories;
+using VitaNote.Infrastructure.Persistence;
 
 namespace VitaNote.Infrastructure.Repositories;
 
@@ -30,6 +32,11 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
     }
 
+    public async Task<bool> ExistsAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        return await _context.Users.AnyAsync(predicate, cancellationToken);
+    }
+
     public async Task AddAsync(User user, CancellationToken cancellationToken = default)
     {
         await _context.Users.AddAsync(user, cancellationToken);
@@ -39,6 +46,12 @@ public class UserRepository : IUserRepository
     public async Task UpdateAsync(User user, CancellationToken cancellationToken = default)
     {
         _context.Users.Update(user);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteAsync(User user, CancellationToken cancellationToken = default)
+    {
+        _context.Users.Remove(user);
         await _context.SaveChangesAsync(cancellationToken);
     }
 }
