@@ -1,0 +1,34 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Warning",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "Database": {
+    "Type": "PostgreSQL",
+    "PostgreSQL": {
+      "ConnectionString": "Host=postgres;Port=5432;Database=vitanote;Username=postgres;Password=postgres"
+    }
+  },
+  "Jwt": {
+    "SecretKey": "ProductionSecretKeyThatShouldBeAtLeast32CharactersLong!",
+    "Issuer": "VitaNote",
+    "Audience": "VitaNoteClient",
+    "ExpirationHours": 24,
+    "RefreshTokenExpirationDays": 7
+  },
+  "Storage": {
+    "BasePath": "/app/uploads",
+    "PublicUrl": "/uploads"
+  },
+  "Ollama": {
+    "Endpoint": "http://ollama:11434",
+    "Model": "gpt-4o"
+  },
+  "Llm": {
+    "Endpoint": "http://ollama:11434",
+    "Model": "gpt-4o",
+    "MaxContextLength": 128000
+  }
+}

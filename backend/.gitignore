@@ -1,0 +1,52 @@
+# ASP.NET Core
+bin/
+obj/
+*.log
+*.tmp
+*.user
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio cache/options directory
+.vs/
+.vscode/
+*.idea/
+*.swp
+*.suo
+*.sln
+*.csproj.user
+
+# ASP.NET Core specific
+node_modules/
+wwwroot/
+Dist/
+appsettings.Development.json
+appsettings.json
+
+# Uploads
+uploads/
+*.upload
+*.temp
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Docker
+.dockerignore

@@ -1,0 +1,13 @@
+[docs]
+title = "VitaNote 项目文档"
+dir = "./docs"
+index = "README.md"
+
+[docs.pages]
+title = "Pages"
+dir = "pages"
+index = "index.md"
+
+[docs.pages.contents]
+title = "Contents"
+dir = "contents"

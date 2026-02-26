@@ -1,0 +1,41 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=vitanote.db"
+  },
+  "Database": {
+    "Type": "Sqlite",
+    "Sqlite": {
+      "ConnectionString": "Data Source=vitanote.db"
+    },
+    "PostgreSQL": {
+      "ConnectionString": "Host=localhost;Port=5432;Database=vitanote;Username=postgres;Password=postgres"
+    }
+  },
+  "Jwt": {
+    "SecretKey": "YourSuperSecretKeyThatShouldBeAtLeast32CharactersLong!",
+    "Issuer": "VitaNote",
+    "Audience": "VitaNoteClient",
+    "ExpirationHours": 24,
+    "RefreshTokenExpirationDays": 7
+  },
+  "Storage": {
+    "BasePath": "uploads",
+    "PublicUrl": "/uploads"
+  },
+  "Ollama": {
+    "Endpoint": "http://localhost:11434",
+    "Model": "gpt-4o"
+  },
+  "Llm": {
+    "Endpoint": "http://localhost:11434",
+    "Model": "gpt-4o",
+    "MaxContextLength": 128000
+  }
+}

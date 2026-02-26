@@ -1,0 +1,12 @@
+{
+  "api": "https://api.vitanote.com",
+  "version": "1.0.0",
+  "description": "VitaNote API Documentation",
+  "contact": {
+    "email": "support@vitanote.com"
+  },
+  "info": {
+    "title": "VitaNote API",
+    "version": "1.0.0"
+  }
+}

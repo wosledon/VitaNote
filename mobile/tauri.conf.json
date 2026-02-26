@@ -1,0 +1,70 @@
+{
+  "$schema": "https://schema.tauri.app/config/2.0",
+  "version": "1.0.0",
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/256x256.png",
+      "icons/512x512.png",
+      "icons/1024x1024.png",
+      "assets/logo.ico"
+    ]
+  },
+  "package": {
+    "productName": "VitaNote",
+    "version": "1.0.0"
+  },
+  "plugins": {
+    "camera": {
+      "android": {
+        "capture_to_file": true,
+        "allow_zoom": true,
+        "allow_video": true,
+        "allow_media": true
+      },
+      "ios": {
+        "capture_to_file": true,
+        "allow_zoom": true,
+        "allow_video": true,
+        "allow_media": true
+      }
+    },
+    "filesystem": {
+      "scope": {
+        "allow": ["$APP/*", "$RESOURCE/*"],
+        "deny": []
+      }
+    },
+    "path": {
+      "all": true
+    },
+    "shell": {
+      "all": false,
+      "scope": {
+        "allow": ["open", "copy", "move"],
+        "deny": []
+      }
+    }
+  },
+  "tauri": {
+    "window": {
+      "title": "VitaNote",
+      "width": 800,
+      "height": 600,
+      "resizable": true,
+      "minWidth": 400,
+      "minHeight": 300
+    },
+    "systemTray": {
+      "iconPath": "icons/128x128.png",
+      "iconAsTemplate": true
+    },
+    "security": {
+      "csp": null
+    }
+  }
+}

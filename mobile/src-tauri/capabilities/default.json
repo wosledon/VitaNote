@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schema.tauri.app/capability/2.0",
+  "identifier": "default",
+  "description": "Default capability for VitaNote",
+  "permissions": [
+    "app:default",
+    "clipboard:default",
+    "fs:default",
+    "image:default",
+    "os:default",
+    "path:default",
+    "shell:default",
+    "window:default"
+  ],
+  "globalShortcuts": [],
+  "notifications": [],
+  "windows": [],
+  "os": {
+    "linux": {},
+    "macOS": {},
+    "windows": {}
+  }
+}

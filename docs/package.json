@@ -1,0 +1,9 @@
+{
+  "docs": {
+    "title": "VitaNote Documentation",
+    "description": "Complete documentation for the VitaNote project"
+  },
+  "build": {
+    "output": "docs/site"
+  }
+}
