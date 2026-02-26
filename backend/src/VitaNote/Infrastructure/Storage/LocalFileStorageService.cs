@@ -1,5 +1,6 @@
 using System.IO.Compression;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Options;
 
 namespace VitaNote.Infrastructure.Storage;
 
@@ -7,9 +8,9 @@ public class LocalFileStorageService : IFileStorageService
 {
     private readonly StorageSettings _settings;
 
-    public LocalFileStorageService(StorageSettings settings)
+    public LocalFileStorageService(IOptions<StorageSettings> settings)
     {
-        _settings = settings;
+        _settings = settings.Value;
     }
     
     public async Task<string> SaveFileAsync(string filePath, string category, CancellationToken cancellationToken = default)
@@ -96,6 +97,6 @@ public class LocalFileStorageService : IFileStorageService
 
 public class StorageSettings
 {
-    public required string BasePath { get; set; } = "uploads";
-    public required string PublicUrl { get; set; } = "/uploads";
+    public string BasePath { get; set; } = "uploads";
+    public string PublicUrl { get; set; } = "/uploads";
 }

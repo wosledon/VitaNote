@@ -11,46 +11,55 @@ import {
   Grid,
   Alert,
 } from '@mui/material'
-import { useAuthStore } from '../store/authStore'
-import apiClient from '../api/client'
-import type { AuthResponse } from '../types/api'
+import { authService } from '../api/services'
 
 export const Register = () => {
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [formData, setFormData] = useState({
+    userName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    phoneNumber: '',
+  })
   const [error, setError] = useState('')
-  const { login, setLoading } = useAuthStore()
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     
-    if (password !== confirmPassword) {
-      setError('两次输入的密码不匹配')
+    if (formData.password !== formData.confirmPassword) {
+      setError('两次输入的密码不一致')
       return
     }
     
-    if (password.length < 8) {
-      setError('密码长度至少为8位')
+    if (formData.password.length < 6) {
+      setError('密码长度至少为6位')
       return
     }
     
     setLoading(true)
     
     try {
-      const response = await apiClient.post<AuthResponse>('/auth/register', {
-        userName: username,
-        email,
-        password,
+      await authService.register({
+        userName: formData.userName,
+        email: formData.email,
+        password: formData.password,
+        phoneNumber: formData.phoneNumber || undefined,
       })
       
-      login(response.data)
-      navigate('/')
+      navigate('/login')
     } catch (err: any) {
-      setError(err.response?.data?.message || '注册失败，请稍后再试')
+      console.error('注册失败:', err)
+      setError(err.response?.data?.message || '注册失败，请检查输入信息')
     } finally {
       setLoading(false)
     }
@@ -67,7 +76,7 @@ export const Register = () => {
         </Typography>
         
         {error && (
-          <Alert severity="error" sx={{ mt: 2 }}>
+          <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
             {error}
           </Alert>
         )}
@@ -79,8 +88,9 @@ export const Register = () => {
               required
               fullWidth
               label="用户名"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              name="userName"
+              value={formData.userName}
+              onChange={handleChange}
               autoFocus
             />
             <TextField
@@ -88,44 +98,52 @@ export const Register = () => {
               required
               fullWidth
               label="邮箱"
+              name="email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleChange}
+            />
+            <TextField
+              margin="normal"
+              fullWidth
+              label="手机号（可选）"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleChange}
             />
             <TextField
               margin="normal"
               required
               fullWidth
               label="密码"
+              name="password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={handleChange}
+              helperText="至少6位字符"
             />
             <TextField
               margin="normal"
               required
               fullWidth
               label="确认密码"
+              name="confirmPassword"
               type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={formData.confirmPassword}
+              onChange={handleChange}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={loading}
             >
-              注册
+              {loading ? '注册中...' : '注册'}
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="/reset-password" variant="body2">
-                  忘记密码？
-                </Link>
-              </Grid>
+            <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/login" variant="body2">
+                <Link href="#/login" variant="body2">
                   已有账户？登录
                 </Link>
               </Grid>

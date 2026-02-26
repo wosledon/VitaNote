@@ -6,11 +6,21 @@ namespace VitaNote.Infrastructure.Persistence;
 public class VitaNoteDbContext : DbContext
 {
     private readonly Guid _currentUserId;
+    private readonly bool _isDesignTime;
     
-    public VitaNoteDbContext(DbContextOptions options, ICurrentUserService currentUserService)
+    public VitaNoteDbContext(DbContextOptions<VitaNoteDbContext> options, ICurrentUserService currentUserService)
         : base(options)
     {
         _currentUserId = currentUserService.UserId;
+        _isDesignTime = false;
+    }
+    
+    // 设计时构造函数（用于 EF Migrations）
+    public VitaNoteDbContext(DbContextOptions<VitaNoteDbContext> options)
+        : base(options)
+    {
+        _currentUserId = Guid.Empty;
+        _isDesignTime = true;
     }
     
     public DbSet<User> Users { get; set; } = default!;
@@ -182,11 +192,17 @@ public class VitaNoteDbContext : DbContext
             if (entity.State == EntityState.Added)
             {
                 entity.Entity.CreatedAt = DateTime.UtcNow;
-                entity.Entity.CreatedBy = _currentUserId.ToString();
+                if (!_isDesignTime)
+                {
+                    entity.Entity.CreatedBy = _currentUserId.ToString();
+                }
             }
             
             entity.Entity.UpdatedAt = DateTime.UtcNow;
-            entity.Entity.UpdatedBy = _currentUserId.ToString();
+            if (!_isDesignTime)
+            {
+                entity.Entity.UpdatedBy = _currentUserId.ToString();
+            }
         }
     }
 }

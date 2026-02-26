@@ -3,24 +3,16 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "npm run tauri dev",
-    "build": "npm run tauri build",
+    "dev": "cd src-tauri && cargo tauri dev",
+    "build": "cd src-tauri && cargo tauri build",
     "tauri": "tauri"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.0",
-    "@tauri-apps/plugin-camera": "^2.0",
-    "@tauri-apps/plugin-clipboard": "^2.0",
-    "@tauri-apps/plugin-fs": "^2.0",
-    "@tauri-apps/plugin-filesystem": "^2.0",
-    "@tauri-apps/plugin-global-shortcut": "^2.0",
-    "@tauri-apps/plugin-notification": "^2.0",
-    "@tauri-apps/plugin-os": "^2.0",
-    "@tauri-apps/plugin-path": "^2.0",
-    "@tauri-apps/plugin-shell": "^2.0"
+    "@tauri-apps/api": "^2.0.0",
+    "@tauri-apps/plugin-shell": "^2.0.0"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2.0",
+    "@tauri-apps/cli": "^2.0.0",
     "@types/react": "^18.2.48",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
