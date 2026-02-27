@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.vita_note" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">@color/purple_500</item>
+        <!-- Light status bar icons (for dark status bar background) -->
+        <item name="android:windowLightStatusBar">false</item>
+        <!-- Fit system windows to avoid status bar overlap -->
+        <item name="android:fitsSystemWindows">true</item>
+        <!-- Ensure content doesn't go under status bar -->
+        <item name="android:windowTranslucentStatus">false</item>
+    </style>
+</resources>

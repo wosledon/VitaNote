@@ -4322,6 +4322,7 @@ name = "vita-note"
 version = "0.1.0"
 dependencies = [
  "dirs 5.0.1",
+ "once_cell",
  "rusqlite",
  "serde",
  "serde_json",

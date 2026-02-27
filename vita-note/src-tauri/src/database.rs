@@ -101,18 +101,41 @@ pub struct ApiResponse<T> {
     pub message: Option<String>,
 }
 
+use tauri::Manager;
+
 fn open_conn() -> Result<Connection, String> {
-    // 确保数据库目录存在
-    let app_data_dir = dirs::data_local_dir()
-        .unwrap_or_else(|| std::path::PathBuf::from("."))
-        .join("VitaNote");
+    // 尝试使用 Tauri 应用目录，如果失败则使用本地数据目录
+    let app_data_dir = if let Some(app_handle) = try_get_app_handle() {
+        app_handle.path().app_data_dir().ok()
+    } else {
+        None
+    };
     
-    if let Err(e) = fs::create_dir_all(&app_data_dir) {
+    let data_dir = app_data_dir.or_else(|| {
+        dirs::data_local_dir().map(|d| d.join("VitaNote"))
+    }).unwrap_or_else(|| {
+        std::path::PathBuf::from("./data")
+    });
+    
+    if let Err(e) = fs::create_dir_all(&data_dir) {
         eprintln!("Failed to create data directory: {}", e);
     }
     
-    let db_path = app_data_dir.join("vitanote.db");
+    let db_path = data_dir.join("vitanote.db");
+    eprintln!("Database path: {:?}", db_path);
     Connection::open(&db_path).map_err(|e| e.to_string())
+}
+
+// 尝试获取全局 app handle（需要在应用启动时设置）
+use std::sync::OnceLock;
+static APP_HANDLE: OnceLock<tauri::AppHandle> = OnceLock::new();
+
+pub fn set_app_handle(handle: tauri::AppHandle) {
+    let _ = APP_HANDLE.set(handle);
+}
+
+fn try_get_app_handle() -> Option<&'static tauri::AppHandle> {
+    APP_HANDLE.get()
 }
 
 fn create_tables(conn: &Connection) -> Result<(), String> {
