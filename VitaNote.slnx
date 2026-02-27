@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/VitaNote.Shared/VitaNote.Shared.csproj" Id="aac55901-568d-49bc-a97d-46b01e40ca9a" />
+    <Project Path="src/VitaNote.WebApi/VitaNote.WebApi.csproj" Id="1068232c-2724-4152-8035-3dd4bb07962e" />
+  </Folder>
+  <Folder Name="/tests/" />
+</Solution>
